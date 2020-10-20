@@ -1,2 +1,2 @@
-# aws-deepracer-track-utils
-All the track utils
+# aws-deepracer-utils
+All the utils we have used to train our models
