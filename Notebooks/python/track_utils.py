@@ -15,7 +15,7 @@ def load_track(track_name, absolute_path="."):
 
     waypoints = get_track_waypoints(track_name, absolute_path)
 
-    print("Loaded %s waypoints" % waypoints.shape[0])
+    # print("Loaded %s waypoints" % waypoints.shape[0])
 
     l_inner_border = LineString(waypoints[:, 2:4])
     l_outer_border = LineString(waypoints[:, 4:6])

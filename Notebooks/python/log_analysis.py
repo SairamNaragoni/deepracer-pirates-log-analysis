@@ -729,3 +729,34 @@ def action_breakdown(df,th, iteration_ids, track_breakdown, center_line,
 
     plt.show()
     plt.clf()
+
+
+def parse_sagemaker_logs(sagemaker_log):
+    trn_data = []
+    last_iteration_id = 0
+    with open(sagemaker_log, 'r') as f:
+        for line in f.readlines():
+            if "Training> Name=main_level/agent, " in line:
+                parts = line.split("Training> Name=main_level/agent, ")[1].split('\t')[0].split('\n')[0].split(',')
+                last_iteration_id = [parts[-1].split('=')[1]]
+            if "Policy training> " in line:
+                parts = line.split("Policy training> ")[1].split('\t')[0].split('\n')[0].split(',')
+                parts = [x.split('=')[1] for x in parts]
+                trn_data.append(",".join(last_iteration_id + parts))
+    # Parse the policy training data
+    df_list = list()
+    
+    for d in trn_data:
+        parts = d.rstrip().split(",")
+        iteration = int(parts[0]) + 1 # add 1 so as to match model.pb (training iteration n == model.pb n+1)
+        surrogate_loss = float(parts[1])
+        kl_divergence = float(parts[2])
+        entropy = float(parts[3])
+        training_epoch = int(parts[4]) + 1
+        learning_rate = float(parts[5])
+    
+        df_list.append((iteration, surrogate_loss, kl_divergence, entropy, training_epoch, learning_rate))
+    
+    header = ['iteration', 'surrogate_loss', 'kl_divergence', 'entropy', 'training_epoch', 'learning_rate']
+    trn_df = pd.DataFrame(df_list, columns=header)
+    return trn_df
