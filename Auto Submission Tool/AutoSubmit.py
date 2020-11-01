@@ -57,7 +57,7 @@ driver = webdriver.Chrome(executable_path="C:\\Users\\Rogue\\Downloads\\Compress
 driver.maximize_window()
 
 # Give the race link here
-fin_tech="https://console.aws.amazon.com/deepracer/home?region=us-east-1#league/arn%3Aaws%3Adeepracer%3A%3A%3Aleaderboard%2F938a91be-226b-4a34-a401-69d75de8b5b4"
+fin_tech="give your race link here"
 
 # Define the models you want to submit in succession.
 model_list=["model1","model2"]
