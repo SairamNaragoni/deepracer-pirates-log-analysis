@@ -12,3 +12,7 @@ We built custom interactive graphs using plotly graphing library on top of basic
 
 ## Auto Submission Tools
 * Use either the [python file](https://github.com/SairamNaragoni/deepracer-pirates-log-analysis/blob/main/Auto%20Submission%20Tool/AutoSubmit.py) or the [notebook](https://github.com/SairamNaragoni/deepracer-pirates-log-analysis/blob/main/Notebooks/pirates_auto_submission.ipynb) to submit multiple models to multiple races.
+
+## References :
+* [Basic Deepracer Notebook](https://github.com/aws-samples/aws-deepracer-workshops/tree/master/log-analysis)
+* [RayG's Deepracer Analysis](https://github.com/TheRayG/deepracer-log-analysis)
