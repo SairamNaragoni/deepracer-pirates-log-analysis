@@ -1,2 +1,2 @@
-# aws-deepracer-utils
-All the utils we have used to train our models
+# aws-deepracer-pirates-log-analysis
+We built custom logs using plotly library on top of basic log-analysis provided by the community
