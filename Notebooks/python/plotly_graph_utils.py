@@ -72,6 +72,9 @@ def plot_multiple_laps(df,episode_df,plotly_config,time_start=8,time_end=9,is_co
 	fig.show()
 
 def plot_time_hist(df):
+	if len(df) == 0:
+		print("No complete laps yet.")
+		return  
 	fig = go.Figure()
 	fig = px.histogram(df, x="time", marginal="rug",
 	                   hover_data={'time' : True, 'steps':True, 'iteration':True, 'episode':True, 'start_at':True, 'reward':True, 'quintile':True})
@@ -81,8 +84,11 @@ def plot_time_hist(df):
 	fig.show()
 
 def plot_complete_lap_analysis(df):
+	if len(df) == 0:
+		print("No complete laps yet.")
+		return  
 	fig = go.Figure()
-	fig = make_subplots(rows=3, cols=2,subplot_titles=("Time", "Steps", "Time-Steps", "Time-Reward","Start_at-Time","Start_at-Steps"))
+	fig = make_subplots(rows=3, cols=2,subplot_titles=("Time", "Steps", "Time-Steps", "Time-Reward","Start_at-Time","Start_at-Reward"))
 	fig.add_trace(
 	    go.Histogram(x=df['time'] ,showlegend = False),
 	    row=1, col=1
@@ -104,7 +110,7 @@ def plot_complete_lap_analysis(df):
 	    row=3, col=1
 	)
 	fig.add_trace(
-	    go.Scatter(x=df['start_at'] ,y=df['steps'] , mode="markers",showlegend = False),
+	    go.Scatter(x=df['start_at'] ,y=df['reward'] , mode="markers",showlegend = False),
 	    row=3, col=2
 	)
 	fig.update_layout(height=1600, width=980, title_text="Complete Laps Analysis")
@@ -117,6 +123,9 @@ def get_bin_size(plot_type):
 
 
 def plot_distribution(df,column = "steps",percent = 25):
+	if len(df) == 0:
+		print("No complete laps yet.")
+		return  
 	df_copy = df.copy()
 	size = len(df_copy)
 	bin_size = get_bin_size(column)
@@ -129,6 +138,9 @@ def plot_distribution(df,column = "steps",percent = 25):
 	fig.show()
 
 def plot_reward_distribution(df,percent=25):
+	if len(df) == 0:
+		print("No complete laps yet.")
+		return  
 	df_copy = df.copy()
 	size = len(df_copy)
 	percent_count = round(size*(percent/100))
