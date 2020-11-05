@@ -11,8 +11,11 @@ import dateutil.parser
 import os
 
 
-def get_log_events(log_group, stream_name=None, stream_prefix=None, start_time=None, end_time=None):
-    client = boto3.client('logs')
+def get_log_events(log_group, stream_name=None, stream_prefix=None, start_time=None, end_time=None, profile="default"):
+    
+    session = boto3.Session(profile_name=profile)
+    client = session.client('logs')
+
     if stream_name is None and stream_prefix is None:
         print("both stream name and prefix can't be None")
         return
@@ -43,7 +46,7 @@ def get_log_events(log_group, stream_name=None, stream_prefix=None, start_time=N
 
 
 def download_log(fname, stream_name=None, stream_prefix=None,
-                 log_group=None, start_time=None, end_time=None, force=False):
+                 log_group=None, start_time=None, end_time=None, force=False, profile="default"):
     if os.path.isfile(fname) and not force:
         print('Log file exists, use force=True to download again')
         return
@@ -61,7 +64,8 @@ def download_log(fname, stream_name=None, stream_prefix=None,
             stream_name=stream_name,
             stream_prefix=stream_prefix,
             start_time=start_time,
-            end_time=end_time
+            end_time=end_time,
+            profile=profile
         )
         for event in logs:
             f.write(event['message'].rstrip())

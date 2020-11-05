@@ -4,6 +4,7 @@ import plotly.figure_factory as ff
 from plotly.subplots import make_subplots
 from python import track_utils as tu
 import math
+import numpy as np
 
 def toCms(x):
     return x*100
@@ -158,9 +159,55 @@ def plot_reward_hist(df):
 	fig.update_xaxes(showgrid=True)
 	fig.show()
 
-def plot_entropy(df):
+def plot_training_metrics(df, column="entropy"):
 	fig = go.Figure()
 	fig = make_subplots(specs=[[{"secondary_y": True}]])
-	fig.add_trace(go.Scatter(x=df['iteration'], y=df['entropy'],
-	                    mode='lines',name='entropy',line=dict({'shape': 'spline', 'smoothing': 1.3})),secondary_y=False,)
+	fig.add_trace(go.Scatter(x=df['iteration'], y=df[column],
+	                    mode='lines',name=column,line=dict({'shape': 'spline', 'smoothing': 1.3})),secondary_y=False,)
+	fig.show()
+
+def plot_iteration_episodes(df,fig,iteration_id,EPISODES_PER_ITERATION, start_at=0, end_at = 69, is_complete=False):
+    for i in range((iteration_id-1)*EPISODES_PER_ITERATION, (iteration_id)*EPISODES_PER_ITERATION):
+        episode_data = df[df['episode'] == i]
+        progress = episode_data['progress'][episode_data.index[-1]]
+        episode_data = episode_data[ (episode_data['closest_waypoint'] >= start_at) & (episode_data['closest_waypoint'] <= end_at)]
+        reward_arr = episode_data['reward'].tolist()
+        speed_arr = episode_data['throttle'].tolist()
+        hover_arr = [list(x) for x in zip(reward_arr, speed_arr)]
+        if is_complete ==False and progress != 100:
+            fig.add_trace(go.Scatter(x=episode_data['x'],y=episode_data['y'],
+                                    mode='markers',
+                                    hovertemplate =
+                                        '<b>%{text}</b>',
+                                    text = ['{}'.format([ entry[0],entry[1] ]) for entry in hover_arr],
+                                    name="ep : "+str(i),
+                                    marker=dict(size=4)))
+        if is_complete==True and progress==100 :
+            fig.add_trace(go.Scatter(x=episode_data['x'],y=episode_data['y'],
+                                    mode='markers',
+                                    text=episode_data['throttle'],
+                                    name="ep : "+str(i),
+                                    marker=dict(size=4)))
+
+def plot_iterations(df,iterations,plotly_config,EPISODES_PER_ITERATION,start_at=0, end_at = 69,is_complete=False):
+	fig = go.Figure()
+	for iteration in iterations:
+	    plot_iteration_episodes(df,fig,iteration,EPISODES_PER_ITERATION,start_at,end_at,is_complete)
+	draw_track_plotly(fig,plotly_config['track_name'])
+	fig.update_layout(width=plotly_config["width"],height=plotly_config["height"])
+	fig.show()
+
+def plot_progress_reward_distribution(df):
+	grouped = df.copy().groupby(['iteration'])
+	by_prgs = grouped['progress'].agg(np.mean).reset_index()
+	by_reward = grouped['reward'].agg(np.mean).reset_index()
+	result = by_prgs \
+	        .merge(by_reward)
+	fig = go.Figure()
+	fig = make_subplots(specs=[[{"secondary_y": True}]])
+	fig.add_trace(go.Scatter(x=result['iteration'], y=result['reward'],
+	                    mode='lines',name='reward',line=dict({'shape': 'spline', 'smoothing': 1.3})))
+	fig.add_trace(go.Scatter(x=result['iteration'], y=result['progress'],
+	                    mode='lines',name='progress',line=dict({'shape': 'spline', 'smoothing': 1.3})),secondary_y=True,)
+	fig.update_layout(height = 650,width=950,title = "Progress and Reward Distribution")
 	fig.show()
