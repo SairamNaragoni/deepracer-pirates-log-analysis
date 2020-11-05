@@ -158,9 +158,9 @@ def plot_reward_hist(df):
 	fig.update_xaxes(showgrid=True)
 	fig.show()
 
-def plot_entropy(df):
+def plot_training_metrics(df, column="entropy"):
 	fig = go.Figure()
 	fig = make_subplots(specs=[[{"secondary_y": True}]])
-	fig.add_trace(go.Scatter(x=df['iteration'], y=df['entropy'],
-	                    mode='lines',name='entropy',line=dict({'shape': 'spline', 'smoothing': 1.3})),secondary_y=False,)
+	fig.add_trace(go.Scatter(x=df['iteration'], y=df[column],
+	                    mode='lines',name=column,line=dict({'shape': 'spline', 'smoothing': 1.3})),secondary_y=False,)
 	fig.show()
