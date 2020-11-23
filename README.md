@@ -6,7 +6,7 @@ We built custom interactive graphs using plotly graphing library on top of basic
 * Accomodated log-analysis for DRFC trainings with multiple robomakers streamed from cloud watch.
 * For local and DRFC trainings, added reward-progress distribution over iterations as seen on deepracer console.
 * Added entropy and surrogate loss graphs.
-* Added graphs to provide insights on First 25% and last 25% of the training data (works with both simulation_agg and complete_ones dataframes).
+* Added graphs to provide insights on First n% and last n% of the training data (works with both simulation_agg and complete_ones dataframes).
 * All the plotly functions are present in [`plotly_graph_utils.py`](https://github.com/SairamNaragoni/deepracer-pirates-log-analysis/blob/main/Notebooks/python/plotly_graph_utils.py). Feel free to make changes to according to your requirement.
 
 ## Track Generation from Waypoints
