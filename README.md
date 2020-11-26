@@ -11,14 +11,13 @@ We built custom interactive graphs using plotly graphing library on top of basic
 * Added **Custom Logging Feature**
 * Added **Object Avoidance Plot**
 
-## Custom Logging
+## Custom Logging  
+`Ex : print("PIRATES_TRACE_LOG:%f;%f;%s;%s;%f" % (botx, boty, objects_location, objects_distance,reward_avoid))`
 * Add the print statement in your reward function for variables or arrays that are you would like to later analyse.
 * Use a `logger-prefix` as shown in the example.
 * In the [Training_analysis_with_custom_logging]() Notebook, configure the properties - `logger_prefix, custom_headers, array_headers`.
-* The Notebook Auto detects the `data_type` of all the fields, with an exception of arrays. Hence you'll have specify the array_headers from custom_headers as shown in the Notebook.
-* Everything will be appended to the dataframe
+* The Notebook Auto detects the `data_type` of all the fields, with an exception of arrays. Hence you'll have specify the `array_headers` from `custom_headers` as shown in the Notebook so that they can be properly parsed.
 * The given example in the Notebook is useful to plot objects on the track for log-analysis.
-`Ex : print("PIRATES_TRACE_LOG:%f;%f;%s;%s;%f" % (botx, boty, objects_location, objects_distance,reward_avoid))`
 
 ## Track Generation from Waypoints
 * A [Utility](https://github.com/SairamNaragoni/deepracer-pirates-log-analysis/blob/main/Notebooks/track_calculation_from_waypoints.ipynb) to generate new tracks using waypoints that deepracer provides.
