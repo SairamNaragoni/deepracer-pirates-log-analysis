@@ -26,9 +26,9 @@ We built custom interactive graphs using plotly graphing library on top of basic
 * Use either the [python file](https://github.com/SairamNaragoni/deepracer-pirates-log-analysis/blob/main/Auto%20Submission%20Tool/AutoSubmit.py) or the [notebook](https://github.com/SairamNaragoni/deepracer-pirates-log-analysis/blob/main/Notebooks/pirates_auto_submission.ipynb) to submit multiple models to multiple races.
 ### Usage of Auto Submission Tool : 
 * The tool runs on google chrome using selenium. *(or use MozillaAutoSubmit.py - runs in headless and loads default profile)*
-* Download chrome driver from https://chromedriver.chromium.org/ for your version of chrome.
-* Log in to your AWS Account on chrome and close the browser.
-* Replace the below variables in the script :
+* Download web driver from https://chromedriver.chromium.org/ for your version of chrome or geckodriver for Mozilla.
+* Log in to your AWS Account and close the browser.
+* Replace the below variables in the script (Similar process for Mozilla) :
   1. The first argument points to the Default profile in chrome. You can find yours by hitting `chrome://version` in your chrome browser.
   2. The second argument is the path to the chrome driver.  
   `options.add_argument("--user-data-dir=C:/Users/Rogue/AppData/Local/Google/Chrome/User Data")`
