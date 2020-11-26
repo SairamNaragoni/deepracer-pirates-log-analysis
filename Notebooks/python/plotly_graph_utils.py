@@ -40,11 +40,20 @@ def draw_track_plotly(fig,track_name, center_line=True):
                         name='outer_border',
                         showlegend = False))
 
+def plot_objects(fig,objects_location):
+	objects_location = np.array(list(map(toCms,np.array(objects_location))))
+	fig.add_trace(go.Scatter(x=objects_location[:,0],y=objects_location[:,1],
+							showlegend = False,
+                            mode='markers',
+                            marker=dict(size=12)))
+
 def plot_episode(episode_data,plotly_config):
     fig = go.Figure()
     fig=px.scatter(episode_data,x="x",y="y",color='throttle',
                           hover_data={'throttle' : True,'yaw':True,'x':True,'y':True,'steer':True,'reward':True,'closest_waypoint':True,
                           "steps":True})
+    if plotly_config["object_avoidance"]:
+    	plot_objects(fig,episode_data['objects_location'].iloc[0])
     fig.update_layout(width=plotly_config["width"],height=plotly_config["height"])
     draw_track_plotly(fig,plotly_config['track_name'])
     fig.show()
