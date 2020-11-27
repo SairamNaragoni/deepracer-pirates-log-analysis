@@ -13,6 +13,7 @@ We built custom interactive graphs using plotly graphing library on top of basic
 
 ## Custom Logging  
 `Ex : print("PIRATES_TRACE_LOG:%f;%f;%s;%s;%f" % (botx, boty, objects_location, objects_distance,reward_avoid))`
+> Note : Please use delimiter as `;` since array logs are printed using `,`
 * Add the print statement in your reward function for variables or arrays that are you would like to later analyse.
 * Use a `logger-prefix` as shown in the example (not necessarily the same).
 * In the [Training_analysis_with_custom_logging](https://github.com/SairamNaragoni/deepracer-pirates-log-analysis/blob/main/Notebooks/Training_analysis_with_custom_logging.ipynb) Notebook, configure the properties - `logger_prefix, custom_headers, array_headers`.
