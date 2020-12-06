@@ -41,8 +41,7 @@ def load_data(fname):
 
     load_file(fname, data)
 
-    if i>1:
-        print("Loaded %s log files (logs rolled over)" % i)
+    print("Loaded %s log files (logs rolled over)" % i)
 
     return data
 

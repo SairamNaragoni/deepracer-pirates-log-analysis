@@ -6,7 +6,7 @@ from shapely.geometry.polygon import LineString
 
 
 def get_track_waypoints(track_name, absolute_path="."):
-    return np.load("%s/tracks/%s.npy" % (absolute_path, track_name))
+    return np.load("%s/Tracks/%s.npy" % (absolute_path, track_name))
 
 
 def load_track(track_name, absolute_path="."):
