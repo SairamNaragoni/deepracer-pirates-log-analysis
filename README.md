@@ -13,9 +13,10 @@ We built custom interactive graphs using plotly graphing library on top of basic
 
 ## Custom Logging  
 `Ex : print("PIRATES_TRACE_LOG:%f;%f;%s;%s;%f" % (botx, boty, objects_location, objects_distance,reward_avoid))`
+> Note : Please use delimiter as `;` since array logs are printed using `,`
 * Add the print statement in your reward function for variables or arrays that are you would like to later analyse.
-* Use a `logger-prefix` as shown in the example.
-* In the [Training_analysis_with_custom_logging]() Notebook, configure the properties - `logger_prefix, custom_headers, array_headers`.
+* Use a `logger-prefix` as shown in the example (not necessarily the same).
+* In the [Training_analysis_with_custom_logging](https://github.com/SairamNaragoni/deepracer-pirates-log-analysis/blob/main/Notebooks/Training_analysis_with_custom_logging.ipynb) Notebook, configure the properties - `logger_prefix, custom_headers, array_headers`.
 * The Notebook Auto detects the `data_type` of all the fields, with an exception of arrays. Hence you'll have specify the `array_headers` from `custom_headers` as shown in the Notebook so that they can be properly parsed.
 * The given example in the Notebook is useful to plot objects on the track for log-analysis.
 
@@ -26,9 +27,9 @@ We built custom interactive graphs using plotly graphing library on top of basic
 * Use either the [python file](https://github.com/SairamNaragoni/deepracer-pirates-log-analysis/blob/main/Auto%20Submission%20Tool/AutoSubmit.py) or the [notebook](https://github.com/SairamNaragoni/deepracer-pirates-log-analysis/blob/main/Notebooks/pirates_auto_submission.ipynb) to submit multiple models to multiple races.
 ### Usage of Auto Submission Tool : 
 * The tool runs on google chrome using selenium. *(or use MozillaAutoSubmit.py - runs in headless and loads default profile)*
-* Download chrome driver from https://chromedriver.chromium.org/ for your version of chrome.
-* Log in to your AWS Account on chrome and close the browser.
-* Replace the below variables in the script :
+* Download web driver from https://chromedriver.chromium.org/ for your version of chrome or geckodriver for Mozilla.
+* Log in to your AWS Account and close the browser.
+* Replace the below variables in the script (Similar process for Mozilla) :
   1. The first argument points to the Default profile in chrome. You can find yours by hitting `chrome://version` in your chrome browser.
   2. The second argument is the path to the chrome driver.  
   `options.add_argument("--user-data-dir=C:/Users/Rogue/AppData/Local/Google/Chrome/User Data")`
