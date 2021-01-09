@@ -8,9 +8,10 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
+from selenium.webdriver import ActionChains
+from selenium.webdriver.firefox.options import Options
 import time
 import datetime
-from selenium.webdriver import ActionChains
     
 def submit_to_race(driver, event, model):
     try:
@@ -51,14 +52,29 @@ def submit_to_race(driver, event, model):
         driver.execute_script("arguments[0].click();", submit_button)       
     except Exception as e :
         print("Unable to submit to the race for the model - ",model,e)
-        return     
+        return  
 
-from selenium.webdriver.firefox.options import Options
-options = Options()
-options.headless = True
-fp = webdriver.FirefoxProfile('C:/Users/Rogue/AppData/Roaming/Mozilla/Firefox/Profiles/nbht8lku.default-release')
-driver = webdriver.Firefox(fp,options=options,executable_path=r'C:/Users/Rogue/Downloads/WebDrivers/geckodriver.exe')
-driver.maximize_window()
+def init_chrome_selenium():
+    # Initializing selenium and chrome browser
+    options = webdriver.ChromeOptions()
+    options.add_argument('--ignore-certificate-errors')
+    options.add_argument("--user-data-dir=C:/Users/Rogue/AppData/Local/Google/Chrome/User Data")
+    options.add_experimental_option("excludeSwitches", ['enable-automation']);
+    driver = webdriver.Chrome(executable_path="C:\\Users\\Rogue\\Downloads\\Compressed\\chromedriver", chrome_options=options)
+    driver.maximize_window()
+    return driver  
+
+def init_mozilla_selenium():
+    # Initializing selenium and mozilla browser
+    options = Options()
+    options.headless = True
+    fp = webdriver.FirefoxProfile('C:/Users/Rogue/AppData/Roaming/Mozilla/Firefox/Profiles/nbht8lku.default-release')
+    driver = webdriver.Firefox(fp,options=options,executable_path=r'C:/Users/Rogue/Downloads/WebDrivers/geckodriver.exe')
+    driver.maximize_window()
+    return driver
+
+# driver = init_chrome_selenium()
+driver = init_mozilla_selenium()
 
 # Give the race link here
 virtual_circuit=""
