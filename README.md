@@ -37,11 +37,12 @@ We built custom interactive graphs using plotly graphing library on top of basic
   `options.add_argument("--user-data-dir=C:/Users/Rogue/AppData/Local/Google/Chrome/User Data")`
   `webdriver.Chrome(executable_path="C:\\Users\\Rogue\\Downloads\\Compressed\\chromedriver", chrome_options=options)`
 * Define your race link/s and model list(refer script on how to). The script supports submissions to multiple races and multiple models to single race in succession.
-* The Race Times for each model in each iteration are logged in `logRaceTimes-timestamp.txt`. (You can make it csv if you'd like by not printing the iteration number)
+* The Race Times for each model in each iteration are logged in `logRaceTimes-{timestamp}.txt`. (You can make it csv if you'd like by not printing the iteration number)
 
 ### Usage of Automated Deletion Tool :
-* `deleteModels.py` helps in deleting all the models created in the account.
+* [deleteModels.py](https://github.com/SairamNaragoni/deepracer-pirates-log-analysis/blob/main/Automated%20Tools/deleteModels.py) helps in deleting all the models created in the account.
 * Configure the selenium driver for mozilla firefox - `init_mozilla_selenium()` or google chrome - `init_chrome_selenium()` in the python file as stated above and run the script.
+* Deletion logs are recorded in the file `delete-{timestamp}.log`
 
 ## References :
 * [Basic Deepracer Notebook](https://github.com/aws-samples/aws-deepracer-workshops/tree/master/log-analysis)
