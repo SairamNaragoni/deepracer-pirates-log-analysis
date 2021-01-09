@@ -8,9 +8,10 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
+from selenium.webdriver import ActionChains
+from selenium.webdriver.firefox.options import Options
 import time
 import datetime
-from selenium.webdriver import ActionChains
     
 def submit_to_race(driver, event, model):
     try:
@@ -22,7 +23,7 @@ def submit_to_race(driver, event, model):
             race_time = driver.find_element_by_id("PLCHLDR_latest_model_time").text
             # logs data as model,time
             log_data = model_name+" , "+race_time+"\n"
-            log_file = open("logRaceTimes.txt", "a")
+            log_file = open(log_file_name, "a")
             log_file.write(log_data)
             log_file.close()
         except Exception as e :
@@ -34,8 +35,10 @@ def submit_to_race(driver, event, model):
         driver.execute_script("arguments[0].click();", race_again_button)
         
         # Wait till element is found and click the dropdown
+        # driver.execute_script("document.body.style.zoom='80%'")
         wait = WebDriverWait(driver, 60)
         dropdown = wait.until(EC.presence_of_element_located((By.CLASS_NAME, "awsui-select-keyboard-area")))
+        driver.execute_script("arguments[0].scrollIntoView();", dropdown)
         actionChains.move_to_element(dropdown).perform()
         dropdown.click()
         time.sleep(1)
@@ -49,14 +52,29 @@ def submit_to_race(driver, event, model):
         driver.execute_script("arguments[0].click();", submit_button)       
     except Exception as e :
         print("Unable to submit to the race for the model - ",model,e)
-        return     
+        return  
 
-from selenium.webdriver.firefox.options import Options
-options = Options()
-options.headless = True
-fp = webdriver.FirefoxProfile('C:/Users/Rogue/AppData/Roaming/Mozilla/Firefox/Profiles/nbht8lku.default-release')
-driver = webdriver.Firefox(fp,options=options,executable_path=r'C:/Users/Rogue/Downloads/WebDrivers/geckodriver.exe')
-driver.maximize_window()
+def init_chrome_selenium():
+    # Initializing selenium and chrome browser
+    options = webdriver.ChromeOptions()
+    options.add_argument('--ignore-certificate-errors')
+    options.add_argument("--user-data-dir=C:/Users/Rogue/AppData/Local/Google/Chrome/User Data")
+    options.add_experimental_option("excludeSwitches", ['enable-automation']);
+    driver = webdriver.Chrome(executable_path="C:\\Users\\Rogue\\Downloads\\Compressed\\chromedriver", chrome_options=options)
+    driver.maximize_window()
+    return driver  
+
+def init_mozilla_selenium():
+    # Initializing selenium and mozilla browser
+    options = Options()
+    options.headless = True
+    fp = webdriver.FirefoxProfile('C:/Users/Rogue/AppData/Roaming/Mozilla/Firefox/Profiles/nbht8lku.default-release')
+    driver = webdriver.Firefox(fp,options=options,executable_path=r'C:/Users/Rogue/Downloads/WebDrivers/geckodriver.exe')
+    driver.maximize_window()
+    return driver
+
+# driver = init_chrome_selenium()
+driver = init_mozilla_selenium()
 
 # Give the race link here
 virtual_circuit=""
@@ -68,8 +86,10 @@ austin_model=["pirates-austin-v9-v6"]
 
 timeout=430
 itr=0
+time_utc = str(int(time.time()));
+log_file_name = "logRaceTimes-"+time_utc+".txt"
 while True:
-    log_file = open("logRaceTimes.txt", "a")
+    log_file = open(log_file_name, "a")
     log_file.write("Running Iteration : "+ str(itr)+"\n")
     log_file.close()
     print("Running Iteration : ",itr)
