@@ -22,7 +22,7 @@ def submit_to_race(driver, event, model):
             race_time = driver.find_element_by_id("PLCHLDR_latest_model_time").text
             # logs data as model,time
             log_data = model_name+" , "+race_time+"\n"
-            log_file = open("logRaceTimes.txt", "a")
+            log_file = open(log_file_name, "a")
             log_file.write(log_data)
             log_file.close()
         except Exception as e :
@@ -34,8 +34,10 @@ def submit_to_race(driver, event, model):
         driver.execute_script("arguments[0].click();", race_again_button)
         
         # Wait till element is found and click the dropdown
+        # driver.execute_script("document.body.style.zoom='80%'")
         wait = WebDriverWait(driver, 60)
         dropdown = wait.until(EC.presence_of_element_located((By.CLASS_NAME, "awsui-select-keyboard-area")))
+        driver.execute_script("arguments[0].scrollIntoView();", dropdown)
         actionChains.move_to_element(dropdown).perform()
         dropdown.click()
         time.sleep(1)
@@ -68,8 +70,10 @@ austin_model=["pirates-austin-v9-v6"]
 
 timeout=430
 itr=0
+time_utc = str(int(time.time()));
+log_file_name = "logRaceTimes-"+time_utc+".txt"
 while True:
-    log_file = open("logRaceTimes.txt", "a")
+    log_file = open(log_file_name, "a")
     log_file.write("Running Iteration : "+ str(itr)+"\n")
     log_file.close()
     print("Running Iteration : ",itr)
