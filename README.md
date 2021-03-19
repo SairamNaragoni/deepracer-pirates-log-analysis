@@ -20,7 +20,7 @@ We built custom interactive graphs using plotly graphing library on top of basic
 * In the [Training_analysis_with_custom_logging](https://github.com/SairamNaragoni/deepracer-pirates-log-analysis/blob/main/Notebooks/Training_analysis_with_custom_logging.ipynb) Notebook, configure the properties - `logger_prefix, custom_headers, array_headers`.
 * The Notebook Auto detects the `data_type` of all the fields, with an exception of arrays. Hence you'll have specify the `array_headers` from `custom_headers` as shown in the Notebook so that they can be properly parsed.
 * The given example in the Notebook is useful to plot objects on the track for log-analysis.
-> Note : If you are log too many custom arrays, it would increase the log-file size and also the time to parse the arrays. Disable `custom_config` when it is not necessary.
+> Note : If you are logging too many custom arrays, it would increase the log-file size and also the time to parse the arrays. Disable `custom_config` when it is not necessary. (This was quickly developed before 2020 Championship Finals for OA and H2H analysis. Haven't found time to optimize it).
 
 ## Track Generation from Waypoints
 * A [Utility](https://github.com/SairamNaragoni/deepracer-pirates-log-analysis/blob/main/Notebooks/track_calculation_from_waypoints.ipynb) to generate new tracks using waypoints that deepracer provides.
