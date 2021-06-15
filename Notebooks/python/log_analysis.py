@@ -575,35 +575,45 @@ def new_reward(panda, center_line, reward_module, verbose=False):
     panda['new_reward'] = new_rewards
 
 
-def plot_track(df, center_line, inner_border, outer_border,
-               track_size=(500, 800), x_shift=0, y_shift=0):
-    track = np.zeros(track_size)  # lets magnify the track by *100
+def plot_track(df, center_line, inner_border, outer_border,margin=10, value_field = 'reward'):
+    outer_size = (
+            (np.max(outer_border[:, 0]) - np.min(outer_border[:, 0])),
+            (np.max(outer_border[:, 1]) - np.min(outer_border[:, 1]))
+        )
+    track_size = (np.asarray(outer_size) + 2*margin).astype(int)
+    track = np.zeros(track_size).transpose()
+    
+    x_compensation = outer_border[:, 0].min()
+    y_compensation = outer_border[:, 1].min()
+    
     for index, row in df.iterrows():
-        x = int(row["x"]) + x_shift
-        y = int(row["y"]) + y_shift
-        reward = row["reward"]
+        x = int((row["x"] - x_compensation + margin) * 1)
+        y = int((row["y"] - y_compensation + margin) * 1)
 
         # clip values that are off track
-        if y >= track_size[0]:
-            y = track_size[0] - 1
+        if y >= track_size[1]:
+            y = track_size[1] - 1
 
-        if x >= track_size[1]:
-            x = track_size[1] - 1
+        if x >= track_size[0]:
+            x = track_size[0] - 1
 
-        track[y, x] = reward
+        track[y, x] = row[value_field]
 
     fig = plt.figure(1, figsize=(12, 16))
     ax = fig.add_subplot(111)
-
-    shifted_center_line = [[point[0] + x_shift, point[1] + y_shift] for point
+    
+    shifted_center_line = [[point[0] - x_compensation + margin, point[1] - y_compensation + margin] for point
                            in center_line]
-    shifted_inner_border = [[point[0] + x_shift, point[1] + y_shift] for point
+    shifted_inner_border = [[point[0] - x_compensation + margin, point[1] - y_compensation + margin] for point
                             in inner_border]
-    shifted_outer_border = [[point[0] + x_shift, point[1] + y_shift] for point
+    shifted_outer_border = [[point[0] - x_compensation + margin, point[1] - y_compensation + margin] for point
                             in outer_border]
 
     print_border(ax, shifted_center_line, shifted_inner_border,
                  shifted_outer_border)
+    
+    plt.title(value_field+" distribution for all actions ")
+    im = plt.imshow(track, cmap='hot', interpolation='bilinear', origin="lower")
 
     return track
 
