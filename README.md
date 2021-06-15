@@ -20,24 +20,29 @@ We built custom interactive graphs using plotly graphing library on top of basic
 * In the [Training_analysis_with_custom_logging](https://github.com/SairamNaragoni/deepracer-pirates-log-analysis/blob/main/Notebooks/Training_analysis_with_custom_logging.ipynb) Notebook, configure the properties - `logger_prefix, custom_headers, array_headers`.
 * The Notebook Auto detects the `data_type` of all the fields, with an exception of arrays. Hence you'll have specify the `array_headers` from `custom_headers` as shown in the Notebook so that they can be properly parsed.
 * The given example in the Notebook is useful to plot objects on the track for log-analysis.
-> Note : If you are log too many custom arrays, it would increase the log-file size and also the time to parse the arrays. Disable `custom_config` when it is not necessary.
+> Note : If you are logging too many custom arrays, it would increase the log-file size and also the time to parse the arrays. Disable `custom_config` when it is not necessary. (This was quickly developed before 2020 Championship Finals for OA and H2H analysis. Haven't found time to optimize it).
 
 ## Track Generation from Waypoints
 * A [Utility](https://github.com/SairamNaragoni/deepracer-pirates-log-analysis/blob/main/Notebooks/track_calculation_from_waypoints.ipynb) to generate new tracks using waypoints that deepracer provides.
 
-## Auto Submission Tools
-* Use either the [python file](https://github.com/SairamNaragoni/deepracer-pirates-log-analysis/blob/main/Auto%20Submission%20Tool/AutoSubmit.py) or the [notebook](https://github.com/SairamNaragoni/deepracer-pirates-log-analysis/blob/main/Notebooks/pirates_auto_submission.ipynb) to submit multiple models to multiple races.
+## Automated Tools
+* Use either the [python file](https://github.com/SairamNaragoni/deepracer-pirates-log-analysis/blob/main/Auto%20Submission%20Tool/AutoSubmit.py) (preferred) or the [notebook](https://github.com/SairamNaragoni/deepracer-pirates-log-analysis/blob/main/Notebooks/pirates_auto_submission.ipynb) to submit multiple models to multiple races.
 ### Usage of Auto Submission Tool : 
-* The tool runs on google chrome using selenium. *(or use MozillaAutoSubmit.py - runs in headless and loads default profile)*
+* The tool runs on mozilla firefox - `init_mozilla_selenium()` or google chrome - `init_chrome_selenium()` using selenium. *(Mozilla - runs in headless)*
 * Download web driver from https://chromedriver.chromium.org/ for your version of chrome or geckodriver for Mozilla.
 * Log in to your AWS Account and close the browser.
-* Replace the below variables in the script (Similar process for Mozilla) :
+* Replace the below variables in the script (Similar process for Mozilla):
   1. The first argument points to the Default profile in chrome. You can find yours by hitting `chrome://version` in your chrome browser.
   2. The second argument is the path to the chrome driver.  
   `options.add_argument("--user-data-dir=C:/Users/Rogue/AppData/Local/Google/Chrome/User Data")`
   `webdriver.Chrome(executable_path="C:\\Users\\Rogue\\Downloads\\Compressed\\chromedriver", chrome_options=options)`
 * Define your race link/s and model list(refer script on how to). The script supports submissions to multiple races and multiple models to single race in succession.
-* The Race Times for each model in each iteration are logged in `logRaceTimes.txt`. (You can make it csv if you'd like by not printing the iteration number)
+* The Race Times for each model in each iteration are logged in `logRaceTimes-{timestamp}.txt`. (You can make it csv if you'd like by not printing the iteration number)
+
+### Usage of Automated Deletion Tool :
+* [deleteModels.py](https://github.com/SairamNaragoni/deepracer-pirates-log-analysis/blob/main/Automated%20Tools/deleteModels.py) helps in deleting all the models created in the account.
+* Configure the selenium driver for mozilla firefox - `init_mozilla_selenium()` or google chrome - `init_chrome_selenium()` in the python file as stated above and run the script.
+* Deletion logs are recorded in the file `delete-{timestamp}.log`
 
 ## References :
 * [Basic Deepracer Notebook](https://github.com/aws-samples/aws-deepracer-workshops/tree/master/log-analysis)
