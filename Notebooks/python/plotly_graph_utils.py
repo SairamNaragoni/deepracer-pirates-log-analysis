@@ -47,11 +47,11 @@ def plot_objects(fig,objects_location):
                             mode='markers',
                             marker=dict(size=12)))
 
-def plot_episode(episode_data,plotly_config):
+def plot_episode(episode_data,plotly_config,color='throttle'):
     fig = go.Figure()
-    fig=px.scatter(episode_data,x="x",y="y",color='throttle',
-                          hover_data={'throttle' : True,'yaw':True,'x':True,'y':True,'steer':True,'reward':True,'closest_waypoint':True,
-                          "steps":True})
+    fig=px.scatter(episode_data,x="x",y="y",color=color,
+                          hover_data={'throttle':True,'yaw':True,'x':True,'y':True,'steer':True,'reward':True,'closest_waypoint':True,
+                          'steps':True, 'progress':True})
     if plotly_config["object_avoidance"]:
     	plot_objects(fig,episode_data['objects_location'].iloc[0])
     fig.update_layout(width=plotly_config["width"],height=plotly_config["height"])
