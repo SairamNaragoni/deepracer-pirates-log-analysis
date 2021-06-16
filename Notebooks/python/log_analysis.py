@@ -75,6 +75,7 @@ def convert_to_pandas(data, episodes_per_iteration=20):
 
     # ignore the first two dummy values that coach throws at the start.
     for d in data[2:]:
+        parts_workaround = 0
         parts = d.rstrip().split(",")
         episode = int(parts[0])
         steps = int(parts[1])
@@ -83,14 +84,18 @@ def convert_to_pandas(data, episodes_per_iteration=20):
         yaw = float(parts[4])
         steer = float(parts[5])
         throttle = float(parts[6])
-        action = float(parts[7])
-        reward = float(parts[8])
-        done = 0 if 'False' in parts[9] else 1
-        all_wheels_on_track = parts[10]
-        progress = float(parts[11])
-        closest_waypoint = int(parts[12])
-        track_len = float(parts[13])
-        tstamp = Decimal(parts[14])
+        try:
+            action = int(parts[7])
+        except ValueError as e:
+            action = -1
+            parts_workaround = 1
+        reward = float(parts[8+parts_workaround])
+        done = 0 if 'False' in parts[9+parts_workaround] else 1
+        all_wheels_on_track = parts[10+parts_workaround]
+        progress = float(parts[11+parts_workaround])
+        closest_waypoint = int(parts[12+parts_workaround])
+        track_len = float(parts[13+parts_workaround])
+        tstamp = Decimal(parts[14+parts_workaround])
 
         iteration = int(episode / episodes_per_iteration) + 1
         df_list.append((iteration, episode, steps, x, y, yaw, steer, throttle,
