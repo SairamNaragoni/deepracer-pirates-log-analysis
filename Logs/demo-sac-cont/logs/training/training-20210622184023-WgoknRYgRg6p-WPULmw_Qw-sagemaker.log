@@ -1,0 +1,181 @@
+Writing training job pid to /opt/ml/training_worker.pid: 53
+Training Worker Args: Namespace(aws_region='us-east-1', checkpoint_dir='./checkpoint_sagemaker', environment_s3_key=None, framework='tensorflow', model_metadata_s3_key='s3://aws-deepracer-data-us-east-1-1/data-00dc8136-6aa4-4112-a55c-926479fbcc84/models/demo-sac/model_metadata.json', preset_s3_key=None, pretrained_checkpoint_dir='./pretrained_checkpoint_sagemaker', pretrained_s3_bucket=None, pretrained_s3_prefix='sagemaker', s3_bucket='aws-deepracer-data-us-east-1-1', s3_prefix='data-00dc8136-6aa4-4112-a55c-926479fbcc84/models/demo-sac/sagemaker-robomaker-artifacts')
+[s3] Successfully downloaded model metadata                  from s3 key data-00dc8136-6aa4-4112-a55c-926479fbcc84/models/demo-sac/model_metadata.json to local ./custom_files/agent/model_metadata.json.
+Sensor list ['FRONT_FACING_CAMERA'], network DEEP_CONVOLUTIONAL_NETWORK_SHALLOW, simapp_version 4.0, training_algorithm sac, action_space_type continuous lidar_config {'num_sectors': 8, 'num_values_per_sector': 8, 'clipping_dist': 2.0}
+Action space from file: {'steering_angle': {'high': 30, 'low': -30}, 'speed': {'high': 1, 'low': 0.5}}
+Using the following hyper-parameters
+{
+  "batch_size": 64,
+  "discount_factor": 0.99,
+  "e_greedy_value": 0.05,
+  "epsilon_steps": 10000,
+  "exploration_type": "additive_noise",
+  "loss_type": "mean squared error",
+  "lr": 0.0003,
+  "num_episodes_between_training": 1,
+  "sac_alpha": 0.5,
+  "stack_size": 1,
+  "term_cond_avg_score": 100000.0,
+  "term_cond_max_episodes": 100000
+}
+[s3] Successfully uploaded hyperparameters to                  s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-00dc8136-6aa4-4112-a55c-926479fbcc84/models/demo-sac/sagemaker-robomaker-artifacts/ip/hyperparameters.json.
+Hostname: ip-10-2-112-56.ec2.internal
+[s3] Successfully uploaded ip address to                  s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-00dc8136-6aa4-4112-a55c-926479fbcc84/models/demo-sac/sagemaker-robomaker-artifacts/ip/ip.json.
+[s3] Successfully uploaded ip done to                  s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-00dc8136-6aa4-4112-a55c-926479fbcc84/models/demo-sac/sagemaker-robomaker-artifacts/ip/done.
+## Creating graph - name: MultiAgentGraphManager
+## Start physics before creating graph
+## Create graph
+## Creating agent - name: agent
+[RL] Created agent loggers
+[RL] Dynamic import of memory:  "ExperienceReplayParameters" {
+    "allow_duplicates_in_batch_sampling": true,
+    "load_memory_from_file_path": null,
+    "max_size": [
+        "<MemoryGranularity.Transitions: 0>",
+        1000000
+    ],
+    "shared_memory": false
+}
+[RL] Dynamically imported of memory <rl_coach.memories.non_episodic.experience_replay.ExperienceReplay object at 0x7f00550932e8>
+[RL] Setting devices
+[RL] Setting filters
+[RL] Setting filter devices: numpy
+[RL] Setting Phase
+[RL] After setting Phase
+[RL] Setting signals
+[RL] Agent init successful
+## Created agent: agent
+WARNING:tensorflow:From /opt/amazon/install/sagemaker_rl_agent/lib/python3.6/site-packages/markov/multi_agent_coach/architectures/tensorflow_components/heads/sac_head.py:65: MultivariateNormalDiag.__init__ (from tensorflow.contrib.distributions.python.ops.mvn_diag) is deprecated and will be removed after 2018-10-01.
+Instructions for updating:
+The TensorFlow Distributions library has moved to TensorFlow Probability (https://github.com/tensorflow/probability). You should update all references to use `tfp.distributions` instead of `tf.contrib.distributions`.
+WARNING:tensorflow:From /root/anaconda/envs/sagemaker_env/lib/python3.6/site-packages/tensorflow/contrib/distributions/python/ops/mvn_diag.py:223: MultivariateNormalLinearOperator.__init__ (from tensorflow.contrib.distributions.python.ops.mvn_linear_operator) is deprecated and will be removed after 2018-10-01.
+Instructions for updating:
+The TensorFlow Distributions library has moved to TensorFlow Probability (https://github.com/tensorflow/probability). You should update all references to use `tfp.distributions` instead of `tf.contrib.distributions`.
+WARNING:tensorflow:From /root/anaconda/envs/sagemaker_env/lib/python3.6/site-packages/tensorflow/contrib/distributions/python/ops/mvn_linear_operator.py:200: AffineLinearOperator.__init__ (from tensorflow.contrib.distributions.python.ops.bijectors.affine_linear_operator) is deprecated and will be removed after 2018-10-01.
+Instructions for updating:
+The TensorFlow Distributions library has moved to TensorFlow Probability (https://github.com/tensorflow/probability). You should update all references to use `tfp.distributions` instead of `tf.contrib.distributions`.
+WARNING:tensorflow:From /root/anaconda/envs/sagemaker_env/lib/python3.6/site-packages/tensorflow/contrib/distributions/python/ops/bijectors/affine_linear_operator.py:158: _DistributionShape.__init__ (from tensorflow.contrib.distributions.python.ops.shape) is deprecated and will be removed after 2018-10-01.
+Instructions for updating:
+The TensorFlow Distributions library has moved to TensorFlow Probability (https://github.com/tensorflow/probability). You should update all references to use `tfp.distributions` instead of `tf.contrib.distributions`.
+Network: policy, Copies: 1 (online network)
+-------------------------------------------
+Input Embedder: FRONT_FACING_CAMERA
+	Input size = [120, 160, 1]
+	Input Normalization (scale = 255.0, offset = 0.0)
+	Convolution (num filters = 32, kernel size = 8, stride = 4)
+	Activation (type = <function relu at 0x7f005c455400>)
+	Convolution (num filters = 64, kernel size = 4, stride = 2)
+	Activation (type = <function relu at 0x7f005c455400>)
+	Convolution (num filters = 64, kernel size = 3, stride = 1)
+	Activation (type = <function relu at 0x7f005c455400>)
+Middleware:
+	Dense (num outputs = 512)
+	Activation (type = <function relu at 0x7f005c455400>)
+Output Head: sac_policy_head
+	policy head:		Dense (num outputs = 256)
+			Dense (num outputs = 256)
+			Dense (num outputs = [4])
+	policy_mu = output[:num_actions], policy_std = output[num_actions:]
+Network: q, Copies: 1 (online network)
+--------------------------------------
+Input Embedder: FRONT_FACING_CAMERA
+	Input size = [120, 160, 1]
+	Input Normalization (scale = 255.0, offset = 0.0)
+	Convolution (num filters = 32, kernel size = 8, stride = 4)
+	Activation (type = <function relu at 0x7f005c455400>)
+	Convolution (num filters = 64, kernel size = 4, stride = 2)
+	Activation (type = <function relu at 0x7f005c455400>)
+	Convolution (num filters = 64, kernel size = 3, stride = 1)
+	Activation (type = <function relu at 0x7f005c455400>)
+Middleware:
+	No layers
+Output Head: q_values_head
+	q1 output		Dense (num outputs = 256)
+			Dense (num outputs = 256)
+			Dense (num outputs = 1)
+	q2 output		Dense (num outputs = 256)
+			Dense (num outputs = 256)
+			Dense (num outputs = 1)
+	min(Q1,Q2)
+Network: v, Copies: 2 (online network | target network)
+-------------------------------------------------------
+Input Embedder: FRONT_FACING_CAMERA
+	Input size = [120, 160, 1]
+	Input Normalization (scale = 255.0, offset = 0.0)
+	Convolution (num filters = 32, kernel size = 8, stride = 4)
+	Activation (type = <function relu at 0x7f005c455400>)
+	Convolution (num filters = 64, kernel size = 4, stride = 2)
+	Activation (type = <function relu at 0x7f005c455400>)
+	Convolution (num filters = 64, kernel size = 3, stride = 1)
+	Activation (type = <function relu at 0x7f005c455400>)
+Middleware:
+	Dense (num outputs = 512)
+	Activation (type = <function relu at 0x7f005c455400>)
+Output Head: v_values_head
+	Dense (num outputs = 1)
+## Stop physics after creating graph
+## Creating session
+2021-06-22 18:31:43.380050: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+INFO:tensorflow:./checkpoint_sagemaker/agent/0_Step-0.ckpt is not in all_model_checkpoint_paths. Manually adding it.
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/0_Step-0.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-00dc8136-6aa4-4112-a55c-926479fbcc84/models/demo-sac/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 0
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-00dc8136-6aa4-4112-a55c-926479fbcc84/models/demo-sac/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+Unable to find deepracer checkpoint json
+Unable to find the best deepracer checkpoint number. Getting the last checkpoint number
+Unable to find deepracer checkpoint json
+Unable to find the last deepracer checkpoint number.
+Unable to find deepracer checkpoint json
+Unable to find the last deepracer checkpoint number.
+INFO:tensorflow:Froze 13 variables.
+INFO:tensorflow:Converted 13 variables to const ops.
+saved intermediate frozen graph: data-00dc8136-6aa4-4112-a55c-926479fbcc84/models/demo-sac/sagemaker-robomaker-artifacts/model/model_0.pb
+Best checkpoint number: -1, Last checkpoint number: -1
+Copying the frozen checkpoint from ./frozen_models/agent/model_0.pb to /opt/ml/model/agent/model.pb.
+Unable to find deepracer checkpoint json
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-00dc8136-6aa4-4112-a55c-926479fbcc84/models/demo-sac/sagemaker-robomaker-artifacts/model/.lock.
+[s3] Successfully uploaded .ready to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-00dc8136-6aa4-4112-a55c-926479fbcc84/models/demo-sac/sagemaker-robomaker-artifacts/model/.ready.
+DoorMan: installing SIGINT, SIGTERM
+Training> Name=main_level/agent, Worker=0, Episode=1, Total reward=0, Steps=79, Training iteration=0
+INFO:tensorflow:./checkpoint_sagemaker/agent/1_Step-79.ckpt is not in all_model_checkpoint_paths. Manually adding it.
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/1_Step-79.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-00dc8136-6aa4-4112-a55c-926479fbcc84/models/demo-sac/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 1
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-00dc8136-6aa4-4112-a55c-926479fbcc84/models/demo-sac/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-00dc8136-6aa4-4112-a55c-926479fbcc84/models/demo-sac/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-00dc8136-6aa4-4112-a55c-926479fbcc84/models/demo-sac/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+INFO:tensorflow:Froze 13 variables.
+INFO:tensorflow:Converted 13 variables to const ops.
+saved intermediate frozen graph: data-00dc8136-6aa4-4112-a55c-926479fbcc84/models/demo-sac/sagemaker-robomaker-artifacts/model/model_1.pb
+Best checkpoint number: 0, Last checkpoint number: 0
+Copying the frozen checkpoint from ./frozen_models/agent/model_0.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-00dc8136-6aa4-4112-a55c-926479fbcc84/models/demo-sac/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Training> Name=main_level/agent, Worker=0, Episode=2, Total reward=0, Steps=121, Training iteration=79
+INFO:tensorflow:./checkpoint_sagemaker/agent/2_Step-121.ckpt is not in all_model_checkpoint_paths. Manually adding it.
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/2_Step-121.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-00dc8136-6aa4-4112-a55c-926479fbcc84/models/demo-sac/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 2
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-00dc8136-6aa4-4112-a55c-926479fbcc84/models/demo-sac/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-00dc8136-6aa4-4112-a55c-926479fbcc84/models/demo-sac/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-00dc8136-6aa4-4112-a55c-926479fbcc84/models/demo-sac/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+INFO:tensorflow:Froze 13 variables.
+INFO:tensorflow:Converted 13 variables to const ops.
+saved intermediate frozen graph: data-00dc8136-6aa4-4112-a55c-926479fbcc84/models/demo-sac/sagemaker-robomaker-artifacts/model/model_2.pb
+Best checkpoint number: 0, Last checkpoint number: 0
+Copying the frozen checkpoint from ./frozen_models/agent/model_0.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-00dc8136-6aa4-4112-a55c-926479fbcc84/models/demo-sac/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Training> Name=main_level/agent, Worker=0, Episode=3, Total reward=0, Steps=167, Training iteration=121
+INFO:tensorflow:./checkpoint_sagemaker/agent/3_Step-167.ckpt is not in all_model_checkpoint_paths. Manually adding it.
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/3_Step-167.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-00dc8136-6aa4-4112-a55c-926479fbcc84/models/demo-sac/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 3
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-00dc8136-6aa4-4112-a55c-926479fbcc84/models/demo-sac/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-00dc8136-6aa4-4112-a55c-926479fbcc84/models/demo-sac/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-00dc8136-6aa4-4112-a55c-926479fbcc84/models/demo-sac/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+INFO:tensorflow:Froze 13 variables.
+INFO:tensorflow:Converted 13 variables to const ops.
+saved intermediate frozen graph: data-00dc8136-6aa4-4112-a55c-926479fbcc84/models/demo-sac/sagemaker-robomaker-artifacts/model/model_3.pb
+Best checkpoint number: 0, Last checkpoint number: 1
+Copying the frozen checkpoint from ./frozen_models/agent/model_0.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-00dc8136-6aa4-4112-a55c-926479fbcc84/models/demo-sac/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Training> Name=main_level/agent, Worker=0, Episode=4, Total reward=0, Steps=210, Training iteration=167

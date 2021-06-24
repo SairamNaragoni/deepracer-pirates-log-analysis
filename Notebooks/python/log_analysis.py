@@ -21,6 +21,8 @@ from decimal import *
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import re
+import json
 from matplotlib.collections import PatchCollection
 from matplotlib.patches import Rectangle
 from shapely.geometry.polygon import LineString
@@ -54,7 +56,7 @@ def load_file(fname, data):
                 data.append(",".join(parts))
 
 
-def convert_to_pandas(data, episodes_per_iteration=20):
+def convert_to_pandas(data, episodes_per_iteration=20, algo='clipped_ppo',action_space_type="discrete"):
     """
     stdout_ = 'SIM_TRACE_LOG:%d,%d,%.4f,%.4f,%.4f,%.2f,%.2f,%d,%.4f,%s,%s,%.4f,%d,%.2f,%s\n' % (
             self.episodes, self.steps, model_location[0], model_location[1], model_heading,
@@ -71,11 +73,14 @@ def convert_to_pandas(data, episodes_per_iteration=20):
         print(stdout_)
     """
 
+    parts_workaround = 0
+    if algo == "clipped_ppo" and action_space_type == "continuous":
+        parts_workaround = 1
+
     df_list = list()
 
     # ignore the first two dummy values that coach throws at the start.
     for d in data[2:]:
-        parts_workaround = 0
         parts = d.rstrip().split(",")
         episode = int(parts[0])
         steps = int(parts[1])
@@ -88,7 +93,6 @@ def convert_to_pandas(data, episodes_per_iteration=20):
             action = int(parts[7])
         except ValueError as e:
             action = -1
-            parts_workaround = 1
         reward = float(parts[8+parts_workaround])
         done = 0 if 'False' in parts[9+parts_workaround] else 1
         all_wheels_on_track = parts[10+parts_workaround]
@@ -774,3 +778,40 @@ def parse_sagemaker_logs(sagemaker_log):
     header = ['iteration', 'surrogate_loss', 'kl_divergence', 'entropy', 'training_epoch', 'learning_rate']
     trn_df = pd.DataFrame(df_list, columns=header)
     return trn_df
+
+
+def hyperparameters(robomaker_fname):
+    outside_hyperparams = True
+    hyperparameters_string = ""
+    with open(robomaker_fname, 'r') as f:
+        for line in f:
+            if outside_hyperparams:
+                if "Using the following hyper-parameters" in line:
+                    outside_hyperparams = False
+            else:
+                hyperparameters_string += line
+                if "}" in line:
+                    break
+    return json.loads(hyperparameters_string)
+
+def agent_and_network(robomaker_fname):
+    regex1 = r'Sensor list (\[[\'a-zA-Z, _-]+\]), network ([a-zA-Z_]+), simapp_version ([\d.]+)'
+    regex2 = r'Sensor list (\[[\'a-zA-Z, _-]+\]), network ([a-zA-Z_]+), simapp_version ([\d.]+), training_algorithm ([a-zA-Z_]+), action_space_type ([a-zA-Z_]+)'
+    with open(robomaker_fname, 'r') as f:
+        result = {}
+        for line in f:
+            if " * /WORLD_NAME: " in line:
+                result["world"] = line[:-1].split(" ")[-1]
+            elif "Sensor list ['" in line:
+                m = re.search(regex2, line)
+                if m is None:
+                    m = re.search(regex1, line)
+                result["sensor_list"] = json.loads(m.group(1).replace("'", '"'))
+                result["network"] = m.group(2)
+                result["simapp_version"] = m.group(3)
+                try :
+                    result['training_algorithm'] = m.group(4)
+                    result['action_space_type'] = m.group(5)
+                except:
+                    print("sim_app version is on less than v3, ignoring keys 'training_algorithm' and 'action_space_type'")
+                return result
