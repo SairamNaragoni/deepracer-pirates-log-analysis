@@ -11,6 +11,11 @@ We built custom interactive graphs using plotly graphing library on top of basic
 * All the plotly functions are present in [`plotly_graph_utils.py`](https://github.com/SairamNaragoni/deepracer-pirates-log-analysis/blob/main/Notebooks/python/plotly_graph_utils.py). Feel free to make changes to according to your requirement.
 * Added **Custom Logging Feature**
 * Added **Object Avoidance Plot**
+* Added a function to view agent info, network info and hyperparameters
+* The Notebook now supports analysis for the following algorithms :
+  * PPO with Discrete Action Space (default)
+  * PPO with Continuous Action Space
+  * SAC with Continuous Action Space
 
 ## Custom Logging  
 `Ex : print("PIRATES_TRACE_LOG:%f;%f;%s;%s;%f" % (botx, boty, objects_location, objects_distance,reward_avoid))`

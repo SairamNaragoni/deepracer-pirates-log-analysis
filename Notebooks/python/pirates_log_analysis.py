@@ -41,12 +41,16 @@ def load_file(fname, data, logger_prefix):
     except Exception as e:
         print("Exception Occured while Parsing !!",e)
 
-def convert_to_pandas(data, custom_config, episodes_per_iteration=20):
+def convert_to_pandas(data, custom_config, episodes_per_iteration=20, algo='clipped_ppo', action_space_type="discrete"):
 
     if custom_config["custom_config"] == False:
        return la.convert_to_pandas(data,episodes_per_iteration)
     custom_headers = custom_config['custom_headers']
     array_headers = custom_config['array_headers']
+
+    parts_workaround = 0
+    if algo == "clipped_ppo" and action_space_type == "continuous":
+        parts_workaround = 1
 
     """
     stdout_ = 'SIM_TRACE_LOG:%d,%d,%.4f,%.4f,%.4f,%.2f,%.2f,%d,%.4f,%s,%s,%.4f,%d,%.2f,%s\n' % (
@@ -68,7 +72,6 @@ def convert_to_pandas(data, custom_config, episodes_per_iteration=20):
     idx = 0
     # ignore the first two dummy values that coach throws at the start.
     for d in data[2:]:
-        parts_workaround = 0
         d = d.split("\n,")
         parts = d[0].split(",")
         episode = int(parts[0])
@@ -82,7 +85,6 @@ def convert_to_pandas(data, custom_config, episodes_per_iteration=20):
             action = int(parts[7])
         except ValueError as e:
             action = -1
-            parts_workaround = 1
         reward = float(parts[8+parts_workaround])
         done = 0 if 'False' in parts[9+parts_workaround] else 1
         all_wheels_on_track = parts[10+parts_workaround]
