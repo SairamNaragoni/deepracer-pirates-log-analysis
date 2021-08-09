@@ -18,7 +18,7 @@ We built custom interactive graphs using plotly graphing library on top of basic
   * SAC with Continuous Action Space
 #### Create Logs in DRFC :
 * Use [`create_logs.sh`](https://github.com/SairamNaragoni/deepracer-pirates-log-analysis/blob/main/create_logs.sh) to flush the docker logs to the path defined in the script with the name LOG_DIR
-* One can close this repo in their EC2 and use jupyter notebook to run the log-analysis inside the EC2 itself.
+* One can clone this repo in their EC2 and use jupyter notebook to run the log-analysis inside the EC2 itself.
 * [Coming soon] Ability to get quick useful summary for the training duration on the ec2 terminal itself without having to launch jupyter notebook.
 
 ## Custom Logging :
