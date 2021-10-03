@@ -2,7 +2,7 @@
 ### Features
 * The tool has support for Mozilla and Chrome only and runs on selenium. With the latest versions, both Mozilla and Chrome supports existing profile import in headless mode. 
 * JPMC employees are advised to use [auto_submit_jpmc.py](https://github.com/SairamNaragoni/deepracer-pirates-log-analysis/blob/main/AutomatedTools/auto_submit_jpmc.py). Be it headless or not, you can login to AWS account from the terminal itself. 
-* General public should provide profile info if they are using headless mode, else the script will timeout for 90sec by default for the user to enter login information in non headless mode.
+* General public should provide profile info if they are using headless mode. In normal mode the script will timeout for 90sec by default for the user to enter login information if not already found.
 * Refer to respective sample_config ymls for more information.
 
 ### Usage of Auto Submission Tool : 
