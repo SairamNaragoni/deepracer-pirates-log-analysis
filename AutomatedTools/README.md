@@ -1,4 +1,4 @@
-# AutoSubmission Tool:
+# AutoMated Tool:
 ### Usage of Auto Submission Tool : 
 * The tool has a support for Mozilla and Chrome only and runs on selenium. With the latest versions, both Mozilla and Chrome supports existing profile import in headless mode. 
 * Install the python packages by running `pip3 install -r requirements.txt`
