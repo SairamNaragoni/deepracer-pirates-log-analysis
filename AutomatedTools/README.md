@@ -1,6 +1,9 @@
 # AutoSubmission Tool:
-### Usage of Auto Submission Tool : 
+### Information
 * The tool has a support for Mozilla and Chrome only and runs on selenium. With the latest versions, both Mozilla and Chrome supports existing profile import in headless mode. 
+* JPMC employees are advised to use `auto_submit_jpmc.py`
+### Usage of Auto Submission Tool : 
+* 
 * Install the python packages by running `pip3 install -r requirements.txt`
 * Download web drivers from https://chromedriver.chromium.org/ or https://github.com/mozilla/geckodriver/releases for your version of chrome or Mozilla. Add them to either any of the directory which is in Environment Path or pass the path as `driver.path` in `config.yml`.
 * Log in to your AWS Account and close the browser.
