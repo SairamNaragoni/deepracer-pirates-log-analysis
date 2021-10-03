@@ -1,0 +1,11 @@
+timeout: 400
+driver:
+  login_url: 'https://console.aws.amazon.com/'
+  type: chrome
+  path: 'E:/WebDrivers/chromedriver.exe'
+  headless: False
+  profile: "C:/Users/narag/AppData/Local/Google/Chrome/User Data"
+submissions:
+  race1:
+    link: "https://console.aws.amazon.com/deepracer/home?region=us-east-1#league/arn%3Aaws%3Adeepracer%3A%3A%3Aleaderboard%2F3f4f0e17-37eb-4363-bb9a-3bf1eafdc96b"
+    model: "rogue-morgan-pro-OA-17"

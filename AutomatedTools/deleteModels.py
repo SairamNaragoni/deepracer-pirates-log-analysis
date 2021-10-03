@@ -12,11 +12,17 @@ from selenium.webdriver.firefox.options import Options
 import logging 
 import time
 import datetime
+import yaml
+import getpass
+import psutil
 
-def sign_in(driver,sign_in_url,timeout=90):
-    log.info("Waiting %d seconds for Signin ... \nPlease enter the Signip info ...",timeout)
-    driver.get(sign_in_url)
-    time.sleep(timeout)
+def load_config():
+    with open("config.yml", "r") as stream:
+        try:
+            config = yaml.safe_load(stream)
+        except yaml.YAMLError as ex:
+            print("Failed to load config file",ex)
+        return config
     
 def get_all_models(driver,models_url):
     models=[]
@@ -47,7 +53,7 @@ def get_all_models(driver,models_url):
         
     return models
 
-def delete_model(driver,idx,model_name):
+def delete_model(driver,idx,model_name,model_base_url):
     try:
         # Load the model page, and delete the model
         model_url = model_base_url+model_name
@@ -61,24 +67,58 @@ def delete_model(driver,idx,model_name):
     except Exception as e:
         log.error("Failed to delete the model : %s \n%s",model_name,e)  
 
-def init_chrome_selenium():
+def init_chrome_selenium(driver_config):
     # Initializing selenium and chrome browser
     options = webdriver.ChromeOptions()
+    options.headless = driver_config.get('headless',False)
     options.add_argument('--ignore-certificate-errors')
-    options.add_argument("--user-data-dir=C:/Users/Rogue/AppData/Local/Google/Chrome/User Data")
-    options.add_experimental_option("excludeSwitches", ['enable-automation']);
-    driver = webdriver.Chrome(executable_path="C:\\Users\\Rogue\\Downloads\\Compressed\\chromedriver", chrome_options=options)
+    if 'profile' in driver_config:
+        options.add_argument("--user-data-dir="+driver_config.get('profile'))
+    options.add_experimental_option("excludeSwitches", ['enable-automation'])
+    prefs = {"credentials_enable_service": False,
+     "profile.password_manager_enabled": False}
+    options.add_experimental_option("prefs", prefs)
+    driver = webdriver.Chrome(executable_path=driver_config.get('path','chromedriver'), options=options)
     driver.maximize_window()
     return driver  
 
-def init_mozilla_selenium():
+def init_mozilla_selenium(driver_config):
     # Initializing selenium and mozilla browser
     options = Options()
-    options.headless = False
-    profile = webdriver.FirefoxProfile('C:/Users/Rogue/AppData/Roaming/Mozilla/Firefox/Profiles/4ahj70v9.default-release')
-    driver = webdriver.Firefox(profile,options=options,executable_path=r'C:/Users/Rogue/Downloads/WebDrivers/geckodriver.exe')
+    options.headless = driver_config.get('headless',False)
+    fp = webdriver.FirefoxProfile(driver_config.get('profile',None))
+    fp.set_preference("dom.disable_beforeunload", True)
+    fp.set_preference("browser.tabs.warnOnClose", False)
+    driver = webdriver.Firefox(fp,options=options,executable_path=driver_config.get('path','geckodriver'))
     driver.maximize_window()
     return driver
+
+def sign_in(driver,login_url,timeout=90):
+    print("Waiting %d seconds for Login ... \nPlease enter the Login info in the browser ..."%(timeout))
+    driver.get(login_url)
+    time.sleep(timeout)
+    
+def test_login(driver,login_url):
+    base_url = "https://console.aws.amazon.com/deepracer/home?region=us-east-1#league"
+    driver.get(base_url)
+    time.sleep(2)
+    if base_url != driver.current_url:
+        raise Exception("Could not locate user login data !!")
+
+def kill_driver_process(driver):
+    driver_process = psutil.Process(driver.service.process.pid)
+    if driver_process.is_running():
+        browser_process = driver_process.children(recursive=True)
+        if browser_process:
+            browser_process = browser_process[0]
+            if browser_process.is_running():
+                print("driver is running, attempting to quit...")
+                driver.quit()
+            else:
+                print("Let's kill the process")
+                browser_process.kill()
+        else:
+            print("driver has died")
 
 def init_logger():
     time_utc = str(int(time.time()));
@@ -95,22 +135,44 @@ def init_logger():
     log.setLevel(logging.INFO)
     return log
 
-# driver=init_chrome_selenium()
-driver=init_mozilla_selenium()
+config = load_config()
+timeout = config.get('timeout',360)
+login_url = config['driver'].get('login_url','https://console.aws.amazon.com/')
 log=init_logger()
 
 # Constants
 models_url="https://console.aws.amazon.com/deepracer/home?region=us-east-1#models"
 model_base_url="https://console.aws.amazon.com/deepracer/home?region=us-east-1#model/"
 
-# In case you did not configure the user profile, add the sign in url and uncomment the sign_in() call
-sign_in_url=""
-# sign_in(driver, sign_in_url)
+if config['driver'].get('type', 'mozilla') == 'mozilla':
+    driver = init_mozilla_selenium(config['driver'])
+else:
+    driver = init_chrome_selenium(config['driver'])
 
-# Retrieve all the models
-models=get_all_models(driver, models_url)
+try:
+    headless = config['driver'].get('headless',False)
+    profile = config['driver'].get('profile',None)
+    
+    if headless == True and profile == None:
+         raise Exception("Profile is needed in headless mode")
+    
+    try:
+        test_login(driver,login_url)
+    except Exception as e:
+        if headless == True:
+            raise e
+        sign_in(driver,login_url)
 
-# Delete models one by one starting with the oldest
-for idx,model in reversed(list(enumerate(models))):
-    delete_model(driver,idx,model)
-    time.sleep(2)
+    # Retrieve all the models
+    models=get_all_models(driver, models_url)
+
+    # Delete models one by one starting with the oldest
+    for idx,model in reversed(list(enumerate(models))):
+        delete_model(driver,idx,model,model_base_url)
+        time.sleep(2)
+
+except Exception as e:
+    print("Exception while running the script - ",e)
+finally:
+    print("Closing driver")
+    kill_driver_process(driver)
