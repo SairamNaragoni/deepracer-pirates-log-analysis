@@ -63,16 +63,28 @@
     <td>In headless mode this property is a mandatory for general folks.</td>
   </tr>
   <tr>
-    <td>submissions.<key>.link</td>
+    <td>submissions.{key}.link</td>
     <td>N</td>
     <td>None</td>
     <td>Race link for which you want to run the submissions</td>
   </tr>
   <tr>
-    <td>submissions.<key>.model</td>
+    <td>submissions.{key}.model</td>
     <td>N</td>
     <td>None</td>
     <td>model/s which you want to submit in successions. Do not give comma separated values if you are providing a list. In case a list is provided, models will be submitted one after the other in round robin fasion</td>
+  </tr>
+  <tr>
+    <td>user.sid</td>
+    <td>Y</td>
+    <td>None</td>
+    <td>Required for JPMC employees</td>
+  </tr>
+  <tr>
+    <td>user.domain</td>
+    <td>Y</td>
+    <td>None</td>
+    <td>Required for JPMC employees</td>
   </tr>
 </table>
 
