@@ -2,6 +2,7 @@
 We built custom interactive graphs using plotly graphing library on top of basic log-analysis provided by the community
 
 ## Log Analysis Features :
+* Install the required python packages by running `pip3 install -r requirements.txt`
 * Accommodated the new log folder structure that we download from console.
 * Accomodated log-analysis for DRFC trainings with multiple robomakers streamed from cloud watch.
 * Accomodated log-analysis for DRFC trainings with multiple robomakers inside the EC2 instance itself.
