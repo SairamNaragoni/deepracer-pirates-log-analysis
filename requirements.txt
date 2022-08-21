@@ -3,7 +3,7 @@ Shapely==1.7.1
 plotly==4.14.3
 pandas==1.3.3
 boto3==1.17.46
-numpy==1.20.3
+numpy==1.22.0
 psutil==5.8.0
 selenium==3.141.0
 plotext==3.1.3
