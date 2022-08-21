@@ -60,7 +60,8 @@ def submit_to_race(driver, event, model):
         # Wait till element is found and click the dropdown
         #driver.execute_script("document.body.style.zoom='80%'")
         wait = WebDriverWait(driver, 60)
-        dropdown = wait.until(EC.presence_of_element_located((By.CLASS_NAME, "awsui-select-keyboard-area")))
+        dropdown = wait.until(EC.presence_of_element_located((By.XPATH, "//button[@type='button']/span[text()='Choose a model']")))
+        dropdown = dropdown.find_element_by_xpath("..")
         driver.execute_script("arguments[0].scrollIntoView();", dropdown)
         actionChains.move_to_element(dropdown).perform()
         driver.execute_script("arguments[0].click();", dropdown)
@@ -68,15 +69,16 @@ def submit_to_race(driver, event, model):
         time.sleep(1)
     
         # Select the model
-        selected_model = driver.find_element_by_xpath("//span[@class='awsui-select-option-label' and text()='"+model+"']")  
+        selected_model = driver.find_element_by_xpath("//span[text()='"+model+"']")  
         selected_model.click()
         
         # Click Submit model
-        submit_button = driver.find_element_by_class_name("awsui-button-variant-primary")
+        submit_button = driver.find_element_by_xpath("//button[@type='submit']/span[text()='Enter race']")
+        submit_button.find_element_by_xpath("..")
         driver.execute_script("arguments[0].click();", submit_button)       
     except Exception as e :
         print("Unable to submit to the race for the model - ",model,e)
-        return     
+        return         
     
 def init_chrome_selenium(driver_config):
     # Initializing selenium and chrome browser
@@ -110,7 +112,7 @@ def sign_in(driver,login_url,timeout=90):
     time.sleep(timeout)
     
 def test_login(driver,login_url):
-    base_url = "https://console.aws.amazon.com/deepracer/home?region=us-east-1#league"
+    base_url = "https://us-east-1.console.aws.amazon.com/deepracer/home?region=us-east-1#league"
     driver.get(base_url)
     time.sleep(2)
     if base_url != driver.current_url:
