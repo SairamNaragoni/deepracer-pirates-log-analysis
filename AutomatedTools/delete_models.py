@@ -99,7 +99,7 @@ def sign_in(driver,login_url,timeout=90):
     time.sleep(timeout)
     
 def test_login(driver,login_url):
-    base_url = "https://console.aws.amazon.com/deepracer/home?region=us-east-1#league"
+    base_url = "https://us-east-1.console.aws.amazon.com/deepracer/home?region=us-east-1#league"
     driver.get(base_url)
     time.sleep(2)
     if base_url != driver.current_url:
