@@ -27,11 +27,11 @@ def load_config():
 
 def modal_dismissal(driver):
     try:
-        modal_view = driver.find_element_by_class_name("awsui-modal-dismiss-control")
+        modal_presence = driver.find_element_by_id("PLCHLDR__new_car_reward_modal-header")
         print("modal overlay found...closing it")
-        driver.execute_script("arguments[0].children[0].click();", modal_view)
-    except:
-        pass
+        driver.execute_script("arguments[0].parentNode.parentNode.parentElement.parentNode.parentNode.children[1].children[0].click();", modal_presence)
+    except Exception as e:
+        print("Error while closing the model view", e)
 
 def submit_to_race(driver, event, model):
     try:
